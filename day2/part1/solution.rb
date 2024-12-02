@@ -1,25 +1,20 @@
 # the solution is 432
 
-input_grid = File.readlines('../input.txt').map { |line| line.split.map(&:to_i) }
+INPUT_GRID = File.readlines('../input.txt').map { |line| line.split.map(&:to_i) }
 
-def safe?(nums)
-  return false if nums.length < 2
+def safe?(diff)
+  return false if diff.empty?
 
-  direction = nums[1] > nums[0] ? 1 : -1
-  prev = nums[0]
-
-  nums[1..].each do |num|
-    diff = (num - prev) * direction
-    return false unless (1..3).include?(diff)
-
-    prev = num
-  end
-
-  true
+  direction = diff[0].positive? ? 1 : -1
+  diff.map { |d| d * direction }.all? { |d| (1..3).include?(d) }
 end
 
-total = input_grid.each.reduce(0) do |acc, nums|
-  safe?(nums) ? acc + 1 : acc
-end
+def differences(nums) = nums.each_cons(2).map { |x, y| y - x }
 
-puts total
+
+def sequence_safe?(nums) = safe?(differences(nums))
+
+
+def calc_safe_sequences_count(grid) = grid.count(&method(:sequence_safe?))
+
+puts calc_safe_sequences_count(INPUT_GRID)
